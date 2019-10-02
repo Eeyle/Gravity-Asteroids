@@ -24,7 +24,7 @@ function setup() {
                             random(-0.1, 0.1), 
                             random(-0.1, 0.1), 16));
   }
-  for(let i = 0; i < 3; i++) {
+  for(let i = 0; i < 4; i++) {
     balls.push(new Particle(random(ballSize, width-ballSize), 
                             random(ballSize,height-ballSize), 
                             random(0), 
@@ -106,7 +106,7 @@ function draw() {
         }*/
         
         // all balls break into two half-size balls on death
-        if (balls[j].mass >= 4) {
+        if (balls[j].mass >= 8) {
           for (let k = 0; k < 2; k++) {
             balls.push(new Particle(
               balls[j].pos.x, balls[j].pos.y,
@@ -223,6 +223,9 @@ class Particle {
   
   gravity(ball) {
     let diff = p5.Vector.sub(ball.pos, this.pos);
+    if (diff.mag() && diff.mag() < 100) {
+      diff.mult(-500); // balls get really close together, this flings them apart
+    }
     if (diff.magSq() && this.mass) {
       diff.mult(ball.mass / diff.magSq() / this.mass);
     }
